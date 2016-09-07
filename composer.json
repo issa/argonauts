@@ -21,5 +21,10 @@
         "psr-4": {
             "Argonauts\\": "lib/"
         }
+    },
+    "scripts": {
+        "test": [
+            "composer_modules/bin/codecept run"
+        ]
     }
 }
