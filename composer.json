@@ -1,22 +1,25 @@
 {
-  "name": "issa/studip-plugin-argonauts",
-  "description": "the Stud.IP REST-API plugin",
-  "license": "AGPL",
-  "authors": [
-    {
-      "name": "issa",
-      "email": "issa@luniki.de"
+    "name": "issa/studip-plugin-argonauts",
+    "description": "the Stud.IP REST-API plugin",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "issa",
+            "email": "issa@luniki.de"
+        }
+    ],
+    "config": {
+        "vendor-dir": "composer_modules"
+    },
+    "require": {
+        "slim/slim": "~3.5"
+    },
+    "require-dev": {
+        "codeception/codeception": "2.2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Argonauts\\": "lib/"
+        }
     }
-  ],
-  "config": {
-    "vendor-dir": "composer_modules"
-  },
-  "require": {
-    "slim/slim": "~3.5"
-  },
-  "autoload": {
-    "psr-4": {
-      "Argonauts\\": "lib/"
-    }
-  }
 }
