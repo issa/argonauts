@@ -1,4 +1,5 @@
+codeception.yml
+composer.phar
 composer.lock
 composer_modules/
-
 tests/_output/*
