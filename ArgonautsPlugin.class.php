@@ -2,6 +2,7 @@
 
 require_once 'composer_modules/autoload.php';
 
+use \Argonauts\AppFactory;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
@@ -31,37 +32,16 @@ class ArgonautsPlugin extends \StudIPPlugin implements \SystemPlugin {
     }
 
     public function perform($unconsumed_path) {
+        $appFactory = new AppFactory();
+        $app = $appFactory->makeApp($this);
 
-        $app = new \Slim\App();
+        $app->group('/argonautsplugin', new \Argonauts\JsonApi($app, $this));
 
-        $c = $app->getContainer();
-        $c['plugin'] = $plugin = $this;
-        $c['settings']['displayErrorDetails'] = true;
-
-#        __NAMESPACE__ .  '\controllers\ChatsController:index'
-
-        $app->add(__CLASS__ . ':mw_removeTrailingSlashes');
-
-        $app->group('/argonautsplugin', function () use ($app, $plugin) {
-
-            $this->group('/jsonapi', new Argonauts\JsonApi($app, $plugin));
-
-            $this->get('/dummy', function (Request $request, Response $response, $args) {
-                $response->getBody()->write("Hello, dummy");
-                return $response;
-            });
+        $app->get('/argonautsplugin/dummy', function (Request $request, Response $response, $args) {
+            $response->getBody()->write("Hello, dummy");
+            return $response;
         });
 
         $app->run();
-    }
-
-    function mw_removeTrailingSlashes(Reques $request, Response $response, $next) {
-        $uri = $request->getUri();
-        $path = $uri->getPath();
-        if ($path != '/' && substr($path, -1) == '/') {
-            $uri = $uri->withPath(substr($path, 0, -1));
-            return $response->withRedirect((string) $uri, 301);
-        }
-        return $next($request, $response);
     }
 }
