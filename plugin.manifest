@@ -3,3 +3,4 @@ pluginclassname=ArgonautsPlugin
 origin=luniki
 version=0.1.0
 studipMinVersion=3.1
+studipMaxVersion=3.5.99
