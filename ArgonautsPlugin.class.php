@@ -37,11 +37,6 @@ class ArgonautsPlugin extends \StudIPPlugin implements \SystemPlugin {
 
         $app->group('/argonautsplugin', new \Argonauts\JsonApi($app, $this));
 
-        $app->get('/argonautsplugin/dummy', function (Request $request, Response $response, $args) {
-            $response->getBody()->write("Hello, dummy");
-            return $response;
-        });
-
         $app->run();
     }
 }

@@ -15,13 +15,13 @@ class JsonApi {
 
     public function __invoke()
     {
+
+        $this->app->add(new JsonApiMiddleware($this->app, $this->plugin));
+
         // authorized
         $this->app
             ->group('', [$this, 'authorizedRoutes'])
-            ->add(function ($request, $response, $next) {
-                // TODO: authorize me here
-                return $next($request, $response);
-            });
+            ->add(new AuthorizationMiddleware($this->app, $this->plugin));
 
         // unauthorized
         $this->app->group('', [$this, 'unauthorizedRoutes']);
@@ -36,6 +36,8 @@ class JsonApi {
             $response->getBody()->write("Hello, authorized user, from inside of " . __CLASS__);
             return $response;
         });
+
+        $this->app->get('/users', '\\Argonauts\\Routes\\UserRoutes:index');
     }
 
     public function unauthorizedRoutes()
