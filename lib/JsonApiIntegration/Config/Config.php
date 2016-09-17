@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\Limoncello\Config;
+namespace Argonauts\JsonApiIntegration\Config;
 
 /**
  * Copyright 2015 info@neomerx.com (www.neomerx.com).
@@ -20,7 +20,7 @@ namespace Argonauts\Limoncello\Config;
 class Config
 {
     /** Config file name w/o extension */
-    const NAME = 'limoncello';
+    const NAME = 'json-api-integration';
 
     /** Config key for schema list */
     const SCHEMAS = 'schemas';

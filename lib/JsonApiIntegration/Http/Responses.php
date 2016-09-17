@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\Limoncello\Http;
+namespace Argonauts\JsonApiIntegration\Http;
 
 /*
  * Copyright 2015-2016 info@neomerx.com (www.neomerx.com)
@@ -18,9 +18,7 @@ namespace Argonauts\Limoncello\Http;
  * limitations under the License.
  */
 
-use Limoncello\JsonApi\Contracts\Api\ModelsDataInterface;
 use Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
-use Limoncello\JsonApi\Contracts\Models\PaginatedDataInterface;
 use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
 use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
 use Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
@@ -163,6 +161,7 @@ class Responses extends NeomerxResponses
      */
     protected function getResourceLocationUrl($resource)
     {
+        /*
         if ($resource instanceof ModelsDataInterface) {
             $resource = $resource->getPaginatedData();
         }
@@ -170,6 +169,7 @@ class Responses extends NeomerxResponses
         if ($resource instanceof PaginatedDataInterface) {
             $resource = $resource->getData();
         }
+        */
 
         return parent::getResourceLocationUrl($resource);
     }

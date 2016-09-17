@@ -2,10 +2,10 @@
 
 namespace Argonauts;
 
-use Argonauts\Limoncello\Config\Config as C;
-use Argonauts\Limoncello\Errors\ExceptionThrower;
-use Argonauts\Limoncello\Factories\Factory;
-use Argonauts\Limoncello\Http\Responses;
+use Argonauts\JsonApiIntegration\Config\Config as C;
+use Argonauts\JsonApiIntegration\Errors\ExceptionThrower;
+use Argonauts\JsonApiIntegration\Factories\Factory;
+use Argonauts\JsonApiIntegration\Http\Responses;
 use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
 use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
 use Neomerx\JsonApi\Contracts\Factories\FactoryInterface;

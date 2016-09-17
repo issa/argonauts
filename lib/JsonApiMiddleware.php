@@ -3,7 +3,7 @@
 namespace Argonauts;
 
 use PluginEngine;
-use Argonauts\Limoncello\Config\Config as C;
+use Argonauts\JsonApiIntegration\Config\Config as C;
 
 class JsonApiMiddleware
 {

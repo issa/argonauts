@@ -1,8 +1,8 @@
 <?php
 
-namespace Argonauts\Limoncello\Factories;
+namespace Argonauts\JsonApiIntegration\Factories;
 
-use Argonauts\Limoncello\Encoder\Parser\Parser;
+use Argonauts\JsonApiIntegration\Encoder\Parser\Parser;
 use Neomerx\JsonApi\Factories\Factory as NeomerxFactory;
 use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
 use Neomerx\JsonApi\Contracts\Encoder\Parser\ParserManagerInterface;

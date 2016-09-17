@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\Limoncello\Encoder\Parser;
+namespace Argonauts\JsonApiIntegration\Encoder\Parser;
 
 use \SimpleORMap;
 use Neomerx\JsonApi\Encoder\Parser\Parser as NeomerxParser;

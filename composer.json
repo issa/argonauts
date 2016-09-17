@@ -17,7 +17,8 @@
         "symfony/http-kernel": "~3.0.9"
     },
     "require-dev": {
-        "codeception/codeception": "2.2.4"
+        "codeception/codeception": "2.2.4",
+        "psy/psysh": "@stable"
     },
     "autoload": {
         "psr-4": {

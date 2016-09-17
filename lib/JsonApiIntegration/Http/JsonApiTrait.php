@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\Limoncello\Http;
+namespace Argonauts\JsonApiIntegration\Http;
 
 /*
  * Copyright 2015 info@neomerx.com (www.neomerx.com)

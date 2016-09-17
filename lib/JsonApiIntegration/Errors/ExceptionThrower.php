@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\Limoncello\Errors;
+namespace Argonauts\JsonApiIntegration\Errors;
 
 /*
  * Copyright 2015 info@neomerx.com (www.neomerx.com)

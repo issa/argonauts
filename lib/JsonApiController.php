@@ -2,7 +2,7 @@
 
 namespace Argonauts;
 
-use Argonauts\Limoncello\Http\JsonApiTrait;
+use Argonauts\JsonApiIntegration\Http\JsonApiTrait;
 
 class JsonApiController
 {
