@@ -10,9 +10,10 @@ class UserRoutes extends JsonApiController
 {
     public function index(Request $request, Response $response, $args)
     {
-        #throw new \RuntimeException();
-        #throw new \Neomerx\JsonApi\Exceptions\JsonApiException(new \Neomerx\JsonApi\Document\Error("string-idx"));
+        //throw new \RuntimeException();
+        //throw new \Neomerx\JsonApi\Exceptions\JsonApiException(new \Neomerx\JsonApi\Document\Error("string-idx"));
         $user = $GLOBALS['user']->getAuthenticatedUser();
+
         return $this->getContentResponse($user);
     }
 }

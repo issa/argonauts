@@ -2,7 +2,7 @@
 
 namespace Argonauts\JsonApiIntegration\Encoder\Parser;
 
-use \SimpleORMap;
+use SimpleORMap;
 use Neomerx\JsonApi\Encoder\Parser\Parser as NeomerxParser;
 
 class Parser extends NeomerxParser

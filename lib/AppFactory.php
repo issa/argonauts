@@ -4,7 +4,6 @@ namespace Argonauts;
 
 use Slim\App;
 use StudipPlugin;
-use Argonauts\JsonApiIntegration\Config\Config as C;
 
 class AppFactory
 {

@@ -72,7 +72,7 @@ class AppServiceProvider implements \Pimple\ServiceProviderInterface
     }
 
     /**
-     * @param ContainerInterface               $container
+     * @param ContainerInterface $container
      *
      * @return ResponsesInterface
      */
@@ -122,8 +122,8 @@ class AppServiceProvider implements \Pimple\ServiceProviderInterface
         $encoderClosure = $this->getEncoderClosure($factory, $schemaContainer, $encoderOptions, $config);
         $codecMatcher = $factory->createCodecMatcher();
         $jsonApiType = $factory->createMediaType(
-#            'text',
-#            'html'
+//            'text',
+//            'html'
             MediaTypeInterface::JSON_API_TYPE,
             MediaTypeInterface::JSON_API_SUB_TYPE
         );

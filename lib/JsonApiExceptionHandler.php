@@ -2,7 +2,6 @@
 
 namespace Argonauts;
 
-use Exception;
 use Neomerx\JsonApi\Exceptions\JsonApiException;
 use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
 use Neomerx\JsonApi\Exceptions\ErrorCollection;
@@ -10,14 +9,13 @@ use Neomerx\JsonApi\Document\Error;
 
 class JsonApiExceptionHandler
 {
-
     private $previous;
 
     private $container;
 
     public function __construct($container, $previous = null)
     {
-        $this->previous  = $previous;
+        $this->previous = $previous;
         $this->container = $container;
     }
 
@@ -57,7 +55,7 @@ class JsonApiExceptionHandler
     protected function createJsonApiResponse(JsonApiException $exception)
     {
         $errors = $exception->getErrors();
-        $code   = $exception->getHttpCode();
+        $code = $exception->getHttpCode();
 
         return $this->createErrorResponse($errors, $code);
     }
