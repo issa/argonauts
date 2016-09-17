@@ -2,8 +2,7 @@
 
 namespace Argonauts;
 
-use \Neomerx\Limoncello\Http\JsonApiTrait;
-use \Neomerx\Limoncello\Contracts\IntegrationInterface;
+use Argonauts\Limoncello\Http\JsonApiTrait;
 
 class JsonApiController
 {
@@ -12,8 +11,7 @@ class JsonApiController
     public function __construct($container)
     {
         $this->container = $container;
-        $integration = $container[IntegrationInterface::class];
-        $this->initJsonApiSupport($integration);
+        $this->initJsonApiSupport($container);
         $this->checkParameters();
     }
 }

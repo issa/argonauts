@@ -2,8 +2,8 @@
 
 namespace Argonauts;
 
-class RemoveTrailingSlashesMiddleware {
-
+class RemoveTrailingSlashesMiddleware
+{
     public function __invoke($request, $response, $next)
     {
         $uri = $request->getUri();
@@ -12,6 +12,7 @@ class RemoveTrailingSlashesMiddleware {
             // permanently redirect paths with a trailing slash
             // to their non-trailing counterpart
             $uri = $uri->withPath(substr($path, 0, -1));
+
             return $response->withRedirect((string) $uri, 301);
         }
 

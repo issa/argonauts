@@ -2,11 +2,11 @@
 
 namespace Argonauts;
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
-class JsonApi {
-
+class JsonApi
+{
     public function __construct(\Slim\App $app, \StudipPlugin $plugin)
     {
         $this->app = $app;
@@ -15,7 +15,6 @@ class JsonApi {
 
     public function __invoke()
     {
-
         $this->app->add(new JsonApiMiddleware($this->app, $this->plugin));
 
         // authorized
@@ -33,7 +32,8 @@ class JsonApi {
     public function authorizedRoutes()
     {
         $this->app->get('/auth', function (Request $request, Response $response, $args) {
-            $response->getBody()->write("Hello, authorized user, from inside of " . __CLASS__);
+            $response->getBody()->write('Hello, authorized user, from inside of '.__CLASS__);
+
             return $response;
         });
 
@@ -43,7 +43,8 @@ class JsonApi {
     public function unauthorizedRoutes()
     {
         $this->app->get('/unauth', function (Request $request, Response $response, $args) {
-            $response->getBody()->write("Hello, unauthorized user, from inside of " . __CLASS__);
+            $response->getBody()->write('Hello, unauthorized user, from inside of '.__CLASS__);
+
             return $response;
         });
     }

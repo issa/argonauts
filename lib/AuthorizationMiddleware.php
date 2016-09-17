@@ -2,8 +2,8 @@
 
 namespace Argonauts;
 
-class AuthorizationMiddleware {
-
+class AuthorizationMiddleware
+{
     public function __construct($app, $plugin)
     {
         $this->app = $app;

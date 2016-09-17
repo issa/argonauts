@@ -13,8 +13,8 @@
     },
     "require": {
         "slim/slim": "~3.5",
-        "neomerx/json-api": "~0.6.0",
-        "neomerx/limoncello": "~0.5.0"
+        "neomerx/json-api": "~0.8.10",
+        "symfony/http-kernel": "~3.0.9"
     },
     "require-dev": {
         "codeception/codeception": "2.2.4"

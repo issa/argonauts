@@ -14,10 +14,10 @@ class User extends \Neomerx\JsonApi\Schema\SchemaProvider
     public function getAttributes($user)
     {
         return [
-            'username'   => $user->username,
+            'username' => $user->username,
             'first_name' => $user->Vorname,
-            'last_name'  => $user->Nachname,
-            'avatar'     => \Avatar::getAvatar($user->id)->getURL(\Avatar::NORMAL)
+            'last_name' => $user->Nachname,
+            'avatar' => \Avatar::getAvatar($user->id)->getURL(\Avatar::NORMAL),
         ];
     }
 }
