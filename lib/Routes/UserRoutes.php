@@ -8,6 +8,8 @@ use Argonauts\JsonApiController;
 
 class UserRoutes extends JsonApiController
 {
+    protected $allowedIncludePaths = [ 'contacts' ];
+
     public function index(Request $request, Response $response, $args)
     {
         //throw new \RuntimeException();

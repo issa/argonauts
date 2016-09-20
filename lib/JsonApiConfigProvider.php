@@ -16,6 +16,7 @@ class JsonApiConfigProvider implements \Pimple\ServiceProviderInterface
         $container[C::NAME] = [
             C::SCHEMAS => [
                 \User::class => \Argonauts\Schema\User::class,
+                \Contact::class => \Argonauts\Schema\Contact::class,
             ],
             C::JSON => [
                 C::JSON_URL_PREFIX => rtrim(\PluginEngine::getURL($this->plugin, [], ''), '/'),
