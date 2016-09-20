@@ -2,31 +2,22 @@
 
 namespace Argonauts;
 
-use PluginEngine;
 use Argonauts\JsonApiIntegration\Config\Config as C;
 
 class JsonApiMiddleware
 {
-    public function __construct($app, $plugin)
+    public function __construct($app)
     {
         $this->app = $app;
-        $this->plugin = $plugin;
+        $this->plugin = $app->getContainer()['plugin'];
     }
 
     public function __invoke($req, $res, $next)
     {
         $container = $this->app->getContainer();
 
-        $container[C::NAME] = [
-            C::SCHEMAS => [
-                \User::class => \Argonauts\Schema\User::class,
-            ],
-            C::JSON => [
-                C::JSON_URL_PREFIX => rtrim(PluginEngine::getURL($this->plugin, [], ''), '/'),
-            ],
-        ];
-
-        $container->register(new AppServiceProvider());
+        $container->register(new JsonApiConfigProvider($this->plugin));
+        $container->register(new JsonApiServiceProvider());
 
         $this->registerExceptionHandler($container);
 

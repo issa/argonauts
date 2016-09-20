@@ -86,19 +86,6 @@ class Responses extends NeomerxResponses
     /**
      * {@inheritdoc}
      */
-    public function getContentResponse(
-        $data,
-        $statusCode = JsonApiResponses::HTTP_OK,
-        $links = null,
-        $meta = null,
-        array $headers = []
-    ) {
-        return parent::getContentResponse($data, $statusCode, $links, $meta);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function createResponse($content, $statusCode, array $headers)
     {
         $headers = new Headers($headers);

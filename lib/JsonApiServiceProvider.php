@@ -19,13 +19,19 @@ use Neomerx\JsonApi\Encoder\EncoderOptions;
 use Neomerx\JsonApi\Http\Headers\MediaType;
 use Neomerx\JsonApi\Http\Headers\SupportedExtensions;
 
-class AppServiceProvider implements \Pimple\ServiceProviderInterface
+class JsonApiServiceProvider implements \Pimple\ServiceProviderInterface
 {
     public function register(\Pimple\Container $container)
     {
         // register factory
         $container[FactoryInterface::class] = function ($c) {
-            return new Factory();
+            $factory = new Factory();
+
+            if ($c->has('logger')) {
+                $factory->setLogger($c['logger']);
+            }
+
+            return $factory;
         };
 
         // register config

@@ -15,7 +15,7 @@ class JsonApi
 
     public function __invoke()
     {
-        $this->app->add(new JsonApiMiddleware($this->app, $this->plugin));
+        $this->app->add(new JsonApiMiddleware($this->app));
 
         // authorized
         $this->app

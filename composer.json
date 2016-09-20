@@ -18,7 +18,8 @@
     },
     "require-dev": {
         "codeception/codeception": "2.2.4",
-        "psy/psysh": "@stable"
+        "psy/psysh": "@stable",
+        "monolog/monolog": "1.21"
     },
     "autoload": {
         "psr-4": {

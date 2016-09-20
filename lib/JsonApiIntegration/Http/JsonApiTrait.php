@@ -90,6 +90,7 @@ trait JsonApiTrait
      */
     protected $allowedFilteringParameters = [];
 
+
     private $container;
 
     /**
@@ -117,6 +118,7 @@ trait JsonApiTrait
      */
     private $parametersChecked = false;
 
+
     /**
      * Init integrations with JSON API implementation.
      *
@@ -142,37 +144,9 @@ trait JsonApiTrait
         );
     }
 
-    /**
-     * @return mixed
-     */
-    protected function getDocument()
-    {
-        if ($this->codecMatcher->getDecoder() === null) {
-            $this->codecMatcher->findDecoder($this->getParameters()->getContentTypeHeader());
-        }
 
-        $decoder = $this->codecMatcher->getDecoder();
+    // ***** RESPONSE GENERATORS *****
 
-        return $decoder->decode($this->container['request']->getBody());
-    }
-
-    protected function checkParameters()
-    {
-        $this->parametersChecker->checkQuery($this->container[EncodingParametersInterface::class]);
-        $this->parametersChecked = true;
-    }
-
-    /**
-     * @return ParametersInterface
-     */
-    protected function getParameters()
-    {
-        if ($this->parametersChecked === false) {
-            $this->checkParameters();
-        }
-
-        return $this->container[EncodingParametersInterface::class];
-    }
 
     /**
      * Get response with HTTP code only.
@@ -224,7 +198,6 @@ trait JsonApiTrait
         $meta = null
     ) {
         $this->checkParameters();
-
         $responses = $this->container[ResponsesInterface::class];
 
         return $responses->getContentResponse($data, $statusCode, $links, $meta);
@@ -244,9 +217,43 @@ trait JsonApiTrait
         array $headers = []
     ) {
         $this->checkParameters();
-
         $responses = $this->container[ResponsesInterface::class];
-
         return $responses->getCreatedResponse($resource, $links, $meta, $headers);
     }
+
+
+
+    /**
+     * @return mixed
+     */
+    protected function getDocument()
+    {
+        if ($this->codecMatcher->getDecoder() === null) {
+            $this->codecMatcher->findDecoder($this->getParameters()->getContentTypeHeader());
+        }
+
+        $decoder = $this->codecMatcher->getDecoder();
+
+        return $decoder->decode($this->container['request']->getBody());
+    }
+
+
+    protected function checkParameters()
+    {
+        $this->parametersChecker->checkQuery($this->container[EncodingParametersInterface::class]);
+        $this->parametersChecked = true;
+    }
+
+    /**
+     * @return ParametersInterface
+     */
+    protected function getParameters()
+    {
+        if ($this->parametersChecked === false) {
+            $this->checkParameters();
+        }
+
+        return $this->container[EncodingParametersInterface::class];
+    }
+
 }
