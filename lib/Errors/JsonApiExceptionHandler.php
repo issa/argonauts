@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts;
+namespace Argonauts\Errors;
 
 use Neomerx\JsonApi\Exceptions\JsonApiException;
 use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
