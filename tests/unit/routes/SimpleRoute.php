@@ -11,6 +11,7 @@ class SimpleRoute extends JsonApiController
     public function index(Request $request, Response $response, $args)
     {
         $user = \User::find('76ed43ef286fb55cf9e41beadb484a9f');
+
         return $this->getContentResponse($user);
     }
 
@@ -20,9 +21,10 @@ class SimpleRoute extends JsonApiController
             [
                 'username' => 'new@user',
                 'last_name' => 'User',
-                'first_name' => 'First'
+                'first_name' => 'First',
             ]
         );
+
         return $this->getCreatedResponse($newUser);
     }
 

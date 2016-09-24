@@ -1,11 +1,11 @@
 <?php
 
-namespace Argonauts\JsonApiIntegration\Encoder\Parser;
+namespace Argonauts\JsonApiIntegration;
 
 use SimpleORMap;
 use Neomerx\JsonApi\Encoder\Parser\Parser as NeomerxParser;
 
-class Parser extends NeomerxParser
+class EncoderParser extends NeomerxParser
 {
     /**
      * {@inheritdoc}

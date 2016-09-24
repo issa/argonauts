@@ -1,12 +1,11 @@
 <?php
 
-require_once __DIR__ . '/../../ArgonautsPlugin.class.php';
-require_once __DIR__ . '/routes/SimpleRoute.php';
-require_once __DIR__ . '/routes/AllowUnrecognizedRoute.php';
+require_once __DIR__.'/../../ArgonautsPlugin.class.php';
+require_once __DIR__.'/routes/SimpleRoute.php';
+require_once __DIR__.'/routes/AllowUnrecognizedRoute.php';
 
 use Psr\Http\Message\ServerRequestInterface as RequestInterface;
 use Psr\Http\Message\ResponseInterface as ResponseInterface;
-
 use Slim\Http\Environment;
 use Slim\Http\Headers;
 use Slim\Http\Request;
@@ -37,7 +36,7 @@ class ExampleTest extends \Codeception\Test\Unit
     {
         $this->assertFalse(false);
         $db = \DBManager::get();
-        $stmt = $db->prepare("SELECT 17");
+        $stmt = $db->prepare('SELECT 17');
 
         $stmt->execute([]);
 
@@ -60,7 +59,8 @@ class ExampleTest extends \Codeception\Test\Unit
 
         $app->get('/testRoute',
                     function (RequestInterface $request, ResponseInterface $response, $args) {
-                        $response->getBody()->write("Hello, dummy");
+                        $response->getBody()->write('Hello, dummy');
+
                         return $response;
                     });
 
@@ -74,7 +74,7 @@ class ExampleTest extends \Codeception\Test\Unit
 
         // Invoke app
         $app($req, $res);
-        $this->assertEquals('Hello, dummy', (string)$res->getBody());
+        $this->assertEquals('Hello, dummy', (string) $res->getBody());
     }
 
     public function testExampleJsonApiRoute()
@@ -150,7 +150,6 @@ class ExampleTest extends \Codeception\Test\Unit
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-
     /**
      * @expectedException Neomerx\JsonApi\Exceptions\JsonApiException
      * @expectedExceptionMessage JSON API error
@@ -191,13 +190,13 @@ class ExampleTest extends \Codeception\Test\Unit
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-
     // ***** PRIVATE *****
 
     private function appFactory()
     {
         $plugin = new ArgonautsPlugin();
         $factory = new \Argonauts\AppFactory();
+
         return $factory->makeApp($plugin);
     }
 
@@ -211,6 +210,7 @@ class ExampleTest extends \Codeception\Test\Unit
         $body = new RequestBody();
         $req = new Request($env->get('REQUEST_METHOD'), $uri, $headers, $cookies, $serverParams, $body);
         $res = new Response();
+
         return [$req, $res];
     }
 

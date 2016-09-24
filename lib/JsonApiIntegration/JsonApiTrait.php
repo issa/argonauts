@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\JsonApiIntegration\Http;
+namespace Argonauts\JsonApiIntegration;
 
 /*
  * Copyright 2015 info@neomerx.com (www.neomerx.com)
@@ -22,7 +22,6 @@ use Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
 use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
 use Neomerx\JsonApi\Contracts\Parameters\ParametersInterface;
 use Neomerx\JsonApi\Contracts\Parameters\ParametersCheckerInterface;
-use Neomerx\JsonApi\Contracts\Integration\ExceptionThrowerInterface;
 use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
 use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
 
@@ -90,7 +89,6 @@ trait JsonApiTrait
      */
     protected $allowedFilteringParameters = [];
 
-
     private $container;
 
     /**
@@ -104,11 +102,6 @@ trait JsonApiTrait
     private $parametersChecker;
 
     /**
-     * @var ExceptionThrowerInterface
-     */
-    private $exceptionThrower;
-
-    /**
      * @var ParametersInterface
      */
     private $parameters = null;
@@ -117,7 +110,6 @@ trait JsonApiTrait
      * @var bool
      */
     private $parametersChecked = false;
-
 
     /**
      * Init integrations with JSON API implementation.
@@ -132,8 +124,6 @@ trait JsonApiTrait
 
         $this->codecMatcher = $container[CodecMatcherInterface::class];
 
-        $this->exceptionThrower = $container[ExceptionThrowerInterface::class];
-
         $this->parametersChecker = $factory->createQueryChecker(
             $this->allowUnrecognizedParams,
             $this->allowedIncludePaths,
@@ -144,9 +134,7 @@ trait JsonApiTrait
         );
     }
 
-
     // ***** RESPONSE GENERATORS *****
-
 
     /**
      * Get response with HTTP code only.
@@ -218,10 +206,9 @@ trait JsonApiTrait
     ) {
         $this->checkParameters();
         $responses = $this->container[ResponsesInterface::class];
+
         return $responses->getCreatedResponse($resource, $links, $meta, $headers);
     }
-
-
 
     /**
      * @return mixed
@@ -236,7 +223,6 @@ trait JsonApiTrait
 
         return $decoder->decode($this->container['request']->getBody());
     }
-
 
     protected function checkParameters()
     {
@@ -255,5 +241,4 @@ trait JsonApiTrait
 
         return $this->container[EncodingParametersInterface::class];
     }
-
 }

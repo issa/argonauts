@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\JsonApiIntegration\Http;
+namespace Argonauts\JsonApiIntegration;
 
 /*
  * Copyright 2015-2016 info@neomerx.com (www.neomerx.com)

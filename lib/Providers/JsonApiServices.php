@@ -3,9 +3,8 @@
 namespace Argonauts\Providers;
 
 use Argonauts\JsonApiIntegration\Config as C;
-use Argonauts\JsonApiIntegration\Errors\ExceptionThrower;
-use Argonauts\JsonApiIntegration\Factories\Factory;
-use Argonauts\JsonApiIntegration\Http\Responses;
+use Argonauts\JsonApiIntegration\Factory;
+use Argonauts\JsonApiIntegration\Responses;
 use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
 use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
 use Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
@@ -13,7 +12,6 @@ use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
 use Neomerx\JsonApi\Contracts\Http\Headers\HeadersCheckerInterface;
 use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
 use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
-use Neomerx\JsonApi\Contracts\Integration\ExceptionThrowerInterface;
 use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
 use Neomerx\JsonApi\Encoder\EncoderOptions;
 use Neomerx\JsonApi\Http\Headers\MediaType;
@@ -70,10 +68,6 @@ class JsonApiServices implements \Pimple\ServiceProviderInterface
         // register responses
         $container[ResponsesInterface::class] = function ($c) {
             return $this->createResponses($c);
-        };
-
-        $container[ExceptionThrowerInterface::class] = function ($c) {
-            return new ExceptionThrower();
         };
     }
 

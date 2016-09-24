@@ -18,7 +18,7 @@ class JsonApiConfig implements \Pimple\ServiceProviderInterface
                 \User::class => \Argonauts\Schema\User::class,
                 \Contact::class => \Argonauts\Schema\Contact::class,
             ],
-            C::JSON_URL_PREFIX => rtrim(\PluginEngine::getURL($this->plugin, [], ''), '/')
+            C::JSON_URL_PREFIX => rtrim(\PluginEngine::getURL($this->plugin, [], ''), '/'),
         ];
     }
 }

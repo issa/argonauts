@@ -15,7 +15,7 @@ class Contact extends \Neomerx\JsonApi\Schema\SchemaProvider
     {
         return [
             'owner_id' => $contact->owner_id,
-            'user_id' => $contact->user_id
+            'user_id' => $contact->user_id,
         ];
     }
 }
