@@ -1,10 +1,10 @@
 <?php
 
-namespace Argonauts;
+namespace Argonauts\Providers;
 
 use Argonauts\JsonApiIntegration\Config\Config as C;
 
-class JsonApiConfigProvider implements \Pimple\ServiceProviderInterface
+class JsonApiConfig implements \Pimple\ServiceProviderInterface
 {
     public function __construct($plugin)
     {

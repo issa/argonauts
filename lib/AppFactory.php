@@ -4,6 +4,7 @@ namespace Argonauts;
 
 use Slim\App;
 use StudipPlugin;
+use Argonauts\Middlewares\RemoveTrailingSlashes;
 
 class AppFactory
 {
@@ -11,7 +12,7 @@ class AppFactory
     {
         $app = new App();
         $app = $this->configureContainer($app, $plugin);
-        $app->add(new RemoveTrailingSlashesMiddleware());
+        $app->add(new RemoveTrailingSlashes());
 
         return $app;
     }

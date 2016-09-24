@@ -14,8 +14,9 @@ class UserRoutes extends JsonApiController
     {
         //throw new \RuntimeException();
         //throw new \Neomerx\JsonApi\Exceptions\JsonApiException(new \Neomerx\JsonApi\Document\Error("string-idx"));
-        $user = $GLOBALS['user']->getAuthenticatedUser();
+        //$user = $GLOBALS['user']->getAuthenticatedUser();
+        $users = \User::findBySql('1');
 
-        return $this->getContentResponse($user);
+        return $this->getContentResponse($users);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Argonauts;
 
+use Argonauts\Middlewares\Authorization;
+use Argonauts\Middlewares\JsonApi as JsonApiMiddleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -17,16 +19,16 @@ class JsonApi
     {
         $this->app->add(new JsonApiMiddleware($this->app));
 
+        // Register plugin routes
+        \PluginEngine::sendMessage('Argonauts\\JsonApiPlugin', 'registerRoutes', $this->app);
+
         // authorized
         $this->app
             ->group('', [$this, 'authorizedRoutes'])
-            ->add(new AuthorizationMiddleware($this->app, $this->plugin));
+            ->add(new Authorization($this->app, $this->plugin));
 
         // unauthorized
         $this->app->group('', [$this, 'unauthorizedRoutes']);
-
-        // Register plugin routes
-        \PluginEngine::sendMessage('Argonauts\\JsonApiPlugin', 'registerRoutes', $this->app);
     }
 
     public function authorizedRoutes()

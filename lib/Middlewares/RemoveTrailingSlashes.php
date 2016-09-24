@@ -1,8 +1,8 @@
 <?php
 
-namespace Argonauts;
+namespace Argonauts\Middlewares;
 
-class RemoveTrailingSlashesMiddleware
+class RemoveTrailingSlashes
 {
     public function __invoke($request, $response, $next)
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Argonauts;
+namespace Argonauts\Middlewares;
 
-class AuthorizationMiddleware
+class Authorization
 {
     public function __construct($app, $plugin)
     {

@@ -13,7 +13,7 @@ use Slim\Http\Request;
 use Slim\Http\RequestBody;
 use Slim\Http\Response;
 use Slim\Http\Uri;
-use Argonauts\JsonApiMiddleware;
+use Argonauts\Middlewares\JsonApi as JsonApiMiddleware;
 
 class ExampleTest extends \Codeception\Test\Unit
 {
@@ -94,7 +94,7 @@ class ExampleTest extends \Codeception\Test\Unit
         $response = $app($req, $res);
 
         $this->assertEquals(
-            '{"data":{"type":"user","id":"root@studip","attributes":{"username":"root@studip","first_name":"Root","last_name":"Studip"},"links":{"self":"plugins.php\/argonautsplugin\/user\/root@studip"}}}',
+            '{"data":{"type":"user","id":"root@studip","attributes":{"username":"root@studip","first_name":"Root","last_name":"Studip"},"relationships":{"contacts":{"links":{"self":"plugins.php\/argonautsplugin\/users\/76ed43ef286fb55cf9e41beadb484a9f\/contacts"}}},"links":{"self":"plugins.php\/argonautsplugin\/user\/root@studip"}}}',
             (string) $response->getBody()
         );
         $this->assertEquals(200, $response->getStatusCode());
@@ -116,9 +116,16 @@ class ExampleTest extends \Codeception\Test\Unit
         // Invoke app
         $response = $app($req, $res);
 
+        $body = (string) $response->getBody();
+        $jsonBody = json_decode($body, true);
+        $this->assertTrue(array_key_exists('data', $jsonBody));
+
+        $data = $jsonBody['data'];
+        $this->assertEquals('user', $data['type']);
+        $this->assertEquals('new@user', $data['id']);
         $this->assertEquals(
-            '{"data":{"type":"user","id":"new@user","attributes":{"username":"new@user","first_name":"","last_name":""},"links":{"self":"plugins.php\/argonautsplugin\/user\/new@user"}}}',
-            (string) $response->getBody()
+            ['username' => 'new@user', 'first_name' => '', 'last_name' => ''],
+            $data['attributes']
         );
         $this->assertEquals(201, $response->getStatusCode());
     }

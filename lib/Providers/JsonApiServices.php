@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts;
+namespace Argonauts\Providers;
 
 use Argonauts\JsonApiIntegration\Config\Config as C;
 use Argonauts\JsonApiIntegration\Errors\ExceptionThrower;
@@ -19,7 +19,7 @@ use Neomerx\JsonApi\Encoder\EncoderOptions;
 use Neomerx\JsonApi\Http\Headers\MediaType;
 use Neomerx\JsonApi\Http\Headers\SupportedExtensions;
 
-class JsonApiServiceProvider implements \Pimple\ServiceProviderInterface
+class JsonApiServices implements \Pimple\ServiceProviderInterface
 {
     public function register(\Pimple\Container $container)
     {
