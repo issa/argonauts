@@ -2,7 +2,7 @@
 
 namespace Argonauts\Providers;
 
-use Argonauts\JsonApiIntegration\Config\Config as C;
+use Argonauts\JsonApiIntegration\Config as C;
 use Argonauts\JsonApiIntegration\Errors\ExceptionThrower;
 use Argonauts\JsonApiIntegration\Factories\Factory;
 use Argonauts\JsonApiIntegration\Http\Responses;
@@ -92,7 +92,7 @@ class JsonApiServices implements \Pimple\ServiceProviderInterface
         $encoder = $codecMatcher->getEncoder();
 
         $schemaContainer = $container[ContainerInterface::class];
-        $urlPrefix = $container[C::NAME][C::JSON][C::JSON_URL_PREFIX];
+        $urlPrefix = $container[C::NAME][C::JSON_URL_PREFIX];
 
         $responses = new Responses(
             new MediaType(MediaTypeInterface::JSON_API_TYPE, MediaTypeInterface::JSON_API_SUB_TYPE),
@@ -119,17 +119,15 @@ class JsonApiServices implements \Pimple\ServiceProviderInterface
         $factory = $container[FactoryInterface::class];
         $schemaContainer = $container[ContainerInterface::class];
 
-        $options = $this->getValue($config, C::JSON, C::JSON_OPTIONS, C::JSON_OPTIONS_DEFAULT);
-        $urlPrefix = $this->getValue($config, C::JSON, C::JSON_URL_PREFIX, null);
-        $depth = $this->getValue($config, C::JSON, C::JSON_DEPTH, C::JSON_DEPTH_DEFAULT);
-        $encoderOptions = new EncoderOptions($options, $urlPrefix, $depth);
+        $urlPrefix = isset($config[C::JSON_URL_PREFIX]) === true
+                   ? $config[C::JSON_URL_PREFIX]
+                   : null;
+        $encoderOptions = new EncoderOptions(0, $urlPrefix);
 
         $decoderClosure = $this->getDecoderClosure();
         $encoderClosure = $this->getEncoderClosure($factory, $schemaContainer, $encoderOptions, $config);
         $codecMatcher = $factory->createCodecMatcher();
         $jsonApiType = $factory->createMediaType(
-//            'text',
-//            'html'
             MediaTypeInterface::JSON_API_TYPE,
             MediaTypeInterface::JSON_API_SUB_TYPE
         );
@@ -171,26 +169,7 @@ class JsonApiServices implements \Pimple\ServiceProviderInterface
         array $config
     ) {
         return function () use ($factory, $container, $encoderOptions, $config) {
-            $isShowVer = $this->getValue($config, C::JSON, C::JSON_IS_SHOW_VERSION, C::JSON_IS_SHOW_VERSION_DEFAULT);
-            $versionMeta = $this->getValue($config, C::JSON, C::JSON_VERSION_META, null);
-            $encoder = $factory->createEncoder($container, $encoderOptions);
-
-            $isShowVer === false ?: $encoder->withJsonApiVersion($versionMeta);
-
-            return $encoder;
+            return $factory->createEncoder($container, $encoderOptions);
         };
-    }
-
-    /**
-     * @param array  $array
-     * @param string $key1
-     * @param string $key2
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    private function getValue(array $array, $key1, $key2, $default)
-    {
-        return isset($array[$key1][$key2]) === true ? $array[$key1][$key2] : $default;
     }
 }

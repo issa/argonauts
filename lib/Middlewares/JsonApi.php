@@ -3,7 +3,7 @@
 namespace Argonauts\Middlewares;
 
 use Argonauts\JsonApiExceptionHandler;
-use Argonauts\JsonApiIntegration\Config\Config as C;
+use Argonauts\JsonApiIntegration\Config as C;
 use Argonauts\Providers\JsonApiConfig as JsonApiConfigProvider;
 use Argonauts\Providers\JsonApiServices as JsonApiServiceProvider;
 
