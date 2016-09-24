@@ -20,7 +20,7 @@ class JsonApi
         $this->app->add(new JsonApiMiddleware($this->app));
 
         // Register plugin routes
-        \PluginEngine::sendMessage('Argonauts\\JsonApiPlugin', 'registerRoutes', $this->app);
+        \PluginEngine::sendMessage('Argonauts\\Contracts\\JsonApiPlugin', 'registerRoutes', $this->app);
 
         // authorized
         $this->app
