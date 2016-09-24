@@ -2,8 +2,12 @@
 
 namespace Argonauts;
 
+use Argonauts\Contracts\JsonApiPlugin;
 use Argonauts\Middlewares\Authorization;
 use Argonauts\Middlewares\JsonApi as JsonApiMiddleware;
+use Argonauts\Routes\AuthorizedExample;
+use Argonauts\Routes\UnauthorizedExample;
+use Argonauts\Routes\UsersIndex;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -19,35 +23,22 @@ class JsonApi
     {
         $this->app->add(new JsonApiMiddleware($this->app));
 
-        // Register plugin routes
-        \PluginEngine::sendMessage('Argonauts\\Contracts\\JsonApiPlugin', 'registerRoutes', $this->app);
-
-        // authorized
-        $this->app
-            ->group('', [$this, 'authorizedRoutes'])
-            ->add(new Authorization($this->app, $this->plugin));
-
-        // unauthorized
+        $this->app->group('', [$this, 'authorizedRoutes'])->add(new Authorization($this->app, $this->plugin));
         $this->app->group('', [$this, 'unauthorizedRoutes']);
     }
 
     public function authorizedRoutes()
     {
-        $this->app->get('/auth', function (Request $request, Response $response, $args) {
-            $response->getBody()->write('Hello, authorized user, from inside of '.__CLASS__);
+        \PluginEngine::sendMessage(JsonApiPlugin::class, 'registerAuthorizedRoutes', $this->app);
 
-            return $response;
-        });
-
-        $this->app->get('/users', '\\Argonauts\\Routes\\UserRoutes:index');
+        $this->app->get('/auth', AuthorizedExample::class);
+        $this->app->get('/users', UsersIndex::class);
     }
 
     public function unauthorizedRoutes()
     {
-        $this->app->get('/unauth', function (Request $request, Response $response, $args) {
-            $response->getBody()->write('Hello, unauthorized user, from inside of '.__CLASS__);
+        \PluginEngine::sendMessage(JsonApiPlugin::class, 'registerUnauthorizedRoutes', $this->app);
 
-            return $response;
-        });
+        $this->app->get('/unauth', UnauthorizedExample::class);
     }
 }

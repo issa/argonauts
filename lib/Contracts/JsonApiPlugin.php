@@ -8,5 +8,6 @@ namespace Argonauts\Contracts;
 
 interface JsonApiPlugin
 {
-    public function registerRoutes(\Slim\App $app);
+    public function registerAuthorizedRoutes(\Slim\App $app);
+    public function registerUnauthorizedRoutes(\Slim\App $app);
 }

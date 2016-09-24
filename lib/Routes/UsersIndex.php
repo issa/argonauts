@@ -6,9 +6,14 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Argonauts\JsonApiController;
 
-class UserRoutes extends JsonApiController
+class UsersIndex extends JsonApiController
 {
     protected $allowedIncludePaths = ['contacts'];
+
+    public function __invoke(Request $request, Response $response, $args)
+    {
+        return $this->index($request, $response, $args);
+    }
 
     public function index(Request $request, Response $response, $args)
     {
