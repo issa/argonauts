@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\Schema;
+namespace Argonauts\Schemas;
 
 class Contact extends \Neomerx\JsonApi\Schema\SchemaProvider
 {

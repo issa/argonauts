@@ -10,4 +10,5 @@ interface JsonApiPlugin
 {
     public function registerAuthorizedRoutes(\Slim\App $app);
     public function registerUnauthorizedRoutes(\Slim\App $app);
+    public function registerSchemas();
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Argonauts\Schema;
+namespace Argonauts\Schemas;
 
 use Neomerx\JsonApi\Document\Link;
 

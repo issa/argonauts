@@ -2,6 +2,7 @@
 
 namespace Argonauts\Providers;
 
+use Argonauts\Contracts\JsonApiPlugin;
 use Argonauts\JsonApiIntegration\Config as C;
 use Argonauts\JsonApiIntegration\Factory;
 use Argonauts\JsonApiIntegration\Responses;
@@ -42,8 +43,15 @@ class JsonApiServices implements \Pimple\ServiceProviderInterface
         // register schemas
         $container[ContainerInterface::class] = function ($c) {
             $schemas = isset($c[C::NAME][C::SCHEMAS]) ? $c[C::NAME][C::SCHEMAS] : [];
+            $schemaContainer = $c[FactoryInterface::class]->createContainer($schemas);
 
-            return $c[FactoryInterface::class]->createContainer($schemas);
+            $pluginSchemas = \PluginEngine::sendMessage(JsonApiPlugin::class, 'registerSchemas', $schemaContainer);
+            if (is_array($pluginSchemas) && count($pluginSchemas)) {
+                foreach ($pluginSchemas as $arrayOfSchemas) {
+                    $schemaContainer->registerArray($arrayOfSchemas);
+                }
+            }
+            return $schemaContainer;
         };
 
         // register codec matcher
