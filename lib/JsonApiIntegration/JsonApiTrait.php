@@ -89,7 +89,10 @@ trait JsonApiTrait
      */
     protected $allowedFilteringParameters = [];
 
-    private $container;
+    /**
+     * @var Interop\Container\ContainerInterface
+     */
+    protected $container;
 
     /**
      * @var CodecMatcherInterface
@@ -183,12 +186,13 @@ trait JsonApiTrait
         $data,
         $statusCode = ResponsesInterface::HTTP_OK,
         $links = null,
-        $meta = null
+        $meta = null,
+        array $headers = []
     ) {
         $this->checkParameters();
         $responses = $this->container[ResponsesInterface::class];
 
-        return $responses->getContentResponse($data, $statusCode, $links, $meta);
+        return $responses->getContentResponse($data, $statusCode, $links, $meta, $headers);
     }
 
     /**
