@@ -13,8 +13,7 @@
     },
     "require": {
         "slim/slim": "~3.5",
-        "neomerx/json-api": "~0.8.10",
-        "symfony/http-kernel": "~3.0.9"
+        "neomerx/json-api": "~0.8.10"
     },
     "require-dev": {
         "codeception/codeception": "2.2.4",
