@@ -4,6 +4,11 @@ namespace Argonauts;
 
 use Argonauts\JsonApiIntegration\JsonApiTrait;
 
+/*
+use Neomerx\JsonApi\Contracts\Http\Headers\HeadersCheckerInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
+*/
+
 class JsonApiController
 {
     use JsonApiTrait;
@@ -12,6 +17,9 @@ class JsonApiController
     {
         $this->container = $container;
         $this->initJsonApiSupport($container);
-        $this->checkParameters();
+        /*
+        $headerChecker = $this->container[HeadersCheckerInterface::class];
+        $headerChecker->checkHeaders($this->container[HeaderParametersInterface::class]);
+        */
     }
 }

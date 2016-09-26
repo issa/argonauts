@@ -148,8 +148,7 @@ trait JsonApiTrait
      */
     protected function getCodeResponse($statusCode, array $headers = [])
     {
-        $this->checkParameters();
-
+        $this->checkQueryParameters();
         $responses = $this->container[ResponsesInterface::class];
 
         return $responses->getCodeResponse($statusCode, $headers);
@@ -165,8 +164,7 @@ trait JsonApiTrait
      */
     protected function getMetaResponse($meta, $statusCode = Response::HTTP_OK, $headers = [])
     {
-        $this->checkParameters();
-
+        $this->checkQueryParameters();
         $responses = $this->container[ResponsesInterface::class];
 
         return $responses->getMetaResponse($meta, $statusCode, $headers);
@@ -189,7 +187,7 @@ trait JsonApiTrait
         $meta = null,
         array $headers = []
     ) {
-        $this->checkParameters();
+        $this->checkQueryParameters();
         $responses = $this->container[ResponsesInterface::class];
 
         return $responses->getContentResponse($data, $statusCode, $links, $meta, $headers);
@@ -208,10 +206,48 @@ trait JsonApiTrait
         $meta = null,
         array $headers = []
     ) {
-        $this->checkParameters();
+        $this->checkQueryParameters();
         $responses = $this->container[ResponsesInterface::class];
 
         return $responses->getCreatedResponse($resource, $links, $meta, $headers);
+    }
+
+    protected function getPaginatedContentResponse(
+        $data,
+        $total,
+        $statusCode = ResponsesInterface::HTTP_OK,
+        $links = null,
+        $meta = null,
+        array $headers = []
+    ) {
+        $this->checkQueryParameters();
+        $responses = $this->container[ResponsesInterface::class];
+
+        extract($this->getOffsetAndLimit());
+
+        if (!$meta) {
+            $meta = [];
+        }
+
+        $meta['page'] = [
+            'offset' => $offset,
+            'limit' => $limit,
+            'total' => $total,
+        ];
+
+        $paginator = new Paginator($data, $total, $offset, $limit);
+
+        if (!$links) {
+            $links = [];
+        }
+
+        foreach (words('first last prev next') as $rel) {
+            if (list($off, $lim) = $paginator->{'get'.ucfirst($rel).'PageOffsetAndLimit'}()) {
+                $links[$rel] = $this->createLink($off, $lim);
+            }
+        }
+
+        return $responses->getContentResponse($data, $statusCode, $links, $meta, $headers);
     }
 
     /**
@@ -220,7 +256,7 @@ trait JsonApiTrait
     protected function getDocument()
     {
         if ($this->codecMatcher->getDecoder() === null) {
-            $this->codecMatcher->findDecoder($this->getParameters()->getContentTypeHeader());
+            $this->codecMatcher->findDecoder($this->getQueryParameters()->getContentTypeHeader());
         }
 
         $decoder = $this->codecMatcher->getDecoder();
@@ -228,7 +264,7 @@ trait JsonApiTrait
         return $decoder->decode($this->container['request']->getBody());
     }
 
-    protected function checkParameters()
+    protected function checkQueryParameters()
     {
         $this->parametersChecker->checkQuery($this->container[EncodingParametersInterface::class]);
         $this->parametersChecked = true;
@@ -237,12 +273,36 @@ trait JsonApiTrait
     /**
      * @return ParametersInterface
      */
-    protected function getParameters()
+    protected function getQueryParameters()
     {
         if ($this->parametersChecked === false) {
-            $this->checkParameters();
+            $this->checkQueryParameters();
         }
 
         return $this->container[EncodingParametersInterface::class];
+    }
+
+    protected function getOffsetAndLimit($offsetDefault = 0, $limitDefault = 30)
+    {
+        $params = $this->getQueryParameters()->getPaginationParameters();
+
+        return [
+            'offset' => $params && array_key_exists('offset', $params) ? (int) $params['offset'] : $offsetDefault,
+            'limit' => $params && array_key_exists('limit', $params) ? (int) $params['limit'] : $limitDefault,
+        ];
+    }
+
+    private function createLink($offset, $limit)
+    {
+        $factory = $this->container[FactoryInterface::class];
+        $request = $this->container['request'];
+
+        $queryParams = $request->getQueryParams();
+        $queryParams['page']['offset'] = $offset;
+        $queryParams['page']['limit'] = $limit;
+
+        $uri = $request->getUri()->withQuery(http_build_query($queryParams));
+
+        return $factory->createLink((string) $uri, null, true);
     }
 }

@@ -8,8 +8,6 @@ use Argonauts\Middlewares\JsonApi as JsonApiMiddleware;
 use Argonauts\Routes\AuthorizedExample;
 use Argonauts\Routes\UnauthorizedExample;
 use Argonauts\Routes\UsersIndex;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
 
 class JsonApi
 {

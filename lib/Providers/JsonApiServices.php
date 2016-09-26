@@ -51,6 +51,7 @@ class JsonApiServices implements \Pimple\ServiceProviderInterface
                     $schemaContainer->registerArray($arrayOfSchemas);
                 }
             }
+
             return $schemaContainer;
         };
 

@@ -8,7 +8,6 @@ use Argonauts\JsonApiController;
 
 class AuthorizedExample extends JsonApiController
 {
-
     public function __invoke(Request $request, Response $response, $args)
     {
         $response->getBody()->write('Hello, authorized user, from inside of '.__CLASS__);
