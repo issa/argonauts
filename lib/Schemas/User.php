@@ -10,15 +10,15 @@ class User extends \Neomerx\JsonApi\Schema\SchemaProvider
 
     public function getId($user)
     {
-        return $user->username;
+        return studip_utf8encode($user->username);
     }
 
     public function getAttributes($user)
     {
         return [
-            'username' => $user->username,
-            'first_name' => $user->Vorname,
-            'last_name' => $user->Nachname,
+            'username' => studip_utf8encode($user->username),
+            'first_name' => studip_utf8encode($user->Vorname),
+            'last_name' => studip_utf8encode($user->Nachname),
 //            'avatar' => \Avatar::getAvatar($user->id)->getURL(\Avatar::NORMAL),
         ];
     }
@@ -32,22 +32,10 @@ class User extends \Neomerx\JsonApi\Schema\SchemaProvider
         ];
 
         if (in_array('contacts', $includeList)) {
-            $relationships['contacts'][self::DATA] = $user->contacts->map(function ($i) {
-                return $i;
-            });
+            $relationships['contacts'][self::DATA] = $user->contacts;
         } else {
             $relationships['contacts'][self::SHOW_DATA] = false;
         }
-
-        /*
-
-        # TODO: Nutzer, die aus dem Chat ausgetreten sind, tauchen hier, aber nicht unter users auf
-        if (in_array('authors', $includeList)) {
-          $relationships['authors']  = [
-              self::DATA => $this->prepareAuthors($chat)
-          ];
-        }
-        */
 
         return $relationships;
     }
