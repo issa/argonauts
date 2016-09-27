@@ -14,15 +14,14 @@ class UsersIndex extends JsonApiController
 
     public function __invoke(Request $request, Response $response, $args)
     {
-        //throw new \RuntimeException();
-        //throw new \Neomerx\JsonApi\Exceptions\JsonApiException(new \Neomerx\JsonApi\Document\Error("string-idx"));
-        //$user = $GLOBALS['user']->getAuthenticatedUser();
-
-        $users = \User::findBySql('1');
-        $total = count($users);
         extract($this->getOffsetAndLimit());
-        $slice = array_slice($users, $offset, $limit);
+        $total = \User::countBySql();
 
-        return $this->getPaginatedContentResponse($slice, $total);
+        $users = \User::findBySql(
+            '1 ORDER BY username LIMIT ? OFFSET ?',
+            [ $limit, $offset ]
+        );
+
+        return $this->getPaginatedContentResponse($users, $total);
     }
 }

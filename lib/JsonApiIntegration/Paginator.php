@@ -26,7 +26,7 @@ class Paginator
         if ($this->limit === 0) {
             return [0, 0];
         }
-        $last = floor($this->total / $this->limit - 1) * $this->limit;
+        $last = max(0, floor($this->total / $this->limit - 1) * $this->limit);
 
         return [$last, $this->limit];
     }
