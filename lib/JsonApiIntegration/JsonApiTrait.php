@@ -2,29 +2,18 @@
 
 namespace Argonauts\JsonApiIntegration;
 
-/*
- * Copyright 2015 info@neomerx.com (www.neomerx.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 use Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
 use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
 use Neomerx\JsonApi\Contracts\Parameters\ParametersInterface;
 use Neomerx\JsonApi\Contracts\Parameters\ParametersCheckerInterface;
 use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
 use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
 
+/*
+ * @author info@neomerx.com (www.neomerx.com)
+ * @author mlunzena@uos.de
+ */
 trait JsonApiTrait
 {
     /**
@@ -95,19 +84,9 @@ trait JsonApiTrait
     protected $container;
 
     /**
-     * @var CodecMatcherInterface
-     */
-    private $codecMatcher;
-
-    /**
      * @var ParametersCheckerInterface
      */
     private $parametersChecker;
-
-    /**
-     * @var ParametersInterface
-     */
-    private $parameters = null;
 
     /**
      * @var bool
@@ -117,15 +96,13 @@ trait JsonApiTrait
     /**
      * Init integrations with JSON API implementation.
      *
-     * @param
+     * @param $container
      */
     private function initJsonApiSupport($container)
     {
         $this->container = $container;
 
         $factory = $container[FactoryInterface::class];
-
-        $this->codecMatcher = $container[CodecMatcherInterface::class];
 
         $this->parametersChecker = $factory->createQueryChecker(
             $this->allowUnrecognizedParams,
@@ -255,13 +232,15 @@ trait JsonApiTrait
      */
     protected function getDocument()
     {
-        if ($this->codecMatcher->getDecoder() === null) {
-            $this->codecMatcher->findDecoder($this->getQueryParameters()->getContentTypeHeader());
+        $request = $this->container['request'];
+        $codecMatcher = $this->container[CodecMatcherInterface::class];
+        if ($codecMatcher->getDecoder() === null) {
+            $parameters = $this->container[HeaderParametersInterface::class];
+            $codecMatcher->matchDecoder($parameters->getContentTypeHeader());
         }
+        $decoder = $codecMatcher->getDecoder();
 
-        $decoder = $this->codecMatcher->getDecoder();
-
-        return $decoder->decode($this->container['request']->getBody());
+        return $decoder->decode($request->getBody()->getContents());
     }
 
     protected function checkQueryParameters()

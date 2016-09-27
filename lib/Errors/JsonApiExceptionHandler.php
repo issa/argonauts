@@ -29,10 +29,7 @@ class JsonApiExceptionHandler
             $httpCode = 500;
             $details = null;
 
-            #$debugEnabled = $container->get(C::class)
-            #    ->getConfigValue(C::KEY_APP, C::KEY_APP_DEBUG_MODE);
-            $debugEnabled = true;
-
+            $debugEnabled = \Studip\ENV === 'development';
             if ($debugEnabled === true) {
                 $message = $exception->getMessage();
                 $details = (string)$exception;
@@ -44,7 +41,12 @@ class JsonApiExceptionHandler
           }
         */
 
-        return $this->previous === null ? null : call_user_func_array($this->previous, [$request, $response, $exception]);
+        return $this->previous === null
+                               ? null
+                               : call_user_func_array(
+                                   $this->previous,
+                                   [$request, $response, $exception]
+                               );
     }
 
     /**

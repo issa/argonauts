@@ -17,6 +17,7 @@ use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
 use Neomerx\JsonApi\Encoder\EncoderOptions;
 use Neomerx\JsonApi\Http\Headers\MediaType;
 use Neomerx\JsonApi\Http\Headers\SupportedExtensions;
+use Neomerx\JsonApi\Decoders\ArrayDecoder;
 
 class JsonApiServices implements \Pimple\ServiceProviderInterface
 {
@@ -153,7 +154,7 @@ class JsonApiServices implements \Pimple\ServiceProviderInterface
     protected function getDecoderClosure()
     {
         return function () {
-            return new DocumentDecoder();
+            return new ArrayDecoder();
         };
     }
 

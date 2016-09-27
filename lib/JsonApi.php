@@ -8,6 +8,7 @@ use Argonauts\Middlewares\JsonApi as JsonApiMiddleware;
 use Argonauts\Routes\AuthorizedExample;
 use Argonauts\Routes\UnauthorizedExample;
 use Argonauts\Routes\UsersIndex;
+use Argonauts\Routes\UserUpdate;
 
 class JsonApi
 {
@@ -31,6 +32,7 @@ class JsonApi
 
         $this->app->get('/auth', AuthorizedExample::class);
         $this->app->get('/users', UsersIndex::class);
+        $this->app->post('/user/{id}', UserUpdate::class);
     }
 
     public function unauthorizedRoutes()

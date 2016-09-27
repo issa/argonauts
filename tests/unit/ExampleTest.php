@@ -3,6 +3,7 @@
 require_once __DIR__.'/../../ArgonautsPlugin.class.php';
 require_once __DIR__.'/routes/SimpleRoute.php';
 require_once __DIR__.'/routes/AllowUnrecognizedRoute.php';
+require_once __DIR__.'/routes/PostWithBodyRoute.php';
 
 use Psr\Http\Message\ServerRequestInterface as RequestInterface;
 use Psr\Http\Message\ResponseInterface as ResponseInterface;
@@ -190,6 +191,34 @@ class ExampleTest extends \Codeception\Test\Unit
         $this->assertEquals(200, $response->getStatusCode());
     }
 
+
+    public function testPostWithBody()
+    {
+        $app = $this->appFactory();
+
+        $app->post('/resource', 'Argonauts\Test\PostWithBodyRoute')
+            ->add(new JsonApiMiddleware($app));
+
+        $env = Environment::mock(
+            [
+                'SCRIPT_NAME' => '/plugins.php',
+                'REQUEST_URI' => '/resource',
+                'QUERY_STRING' => '',
+                'REQUEST_METHOD' => 'POST',
+                'HTTP_CONTENT_TYPE' => 'application/vnd.api+json'
+            ]
+        );
+
+        // Invoke app
+        $body = new \Slim\Http\Body(fopen('php://temp', 'r+'));
+        $body->write(json_encode(
+                         [ "data" => [ "type" => "articles", "id" => "1" ] ]
+                     ));
+        $body->rewind();
+        $response = $this->sendMockRequest($app, $env, $body);
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
     // ***** PRIVATE *****
 
     private function appFactory()
@@ -200,27 +229,26 @@ class ExampleTest extends \Codeception\Test\Unit
         return $factory->makeApp($plugin);
     }
 
-    private function prepareReqAndRes($env)
+    private function prepareReqAndRes($env, $body = null)
     {
         // Prepare request and response objects
         $uri = Uri::createFromEnvironment($env);
         $headers = Headers::createFromEnvironment($env);
         $cookies = [];
         $serverParams = $env->all();
-        $body = new RequestBody();
+        $body = $body ?: new RequestBody();
         $req = new Request($env->get('REQUEST_METHOD'), $uri, $headers, $cookies, $serverParams, $body);
         $res = new Response();
 
         return [$req, $res];
     }
 
-    private function sendMockRequest($app, $env)
+    private function sendMockRequest($app, $env, $body = null)
     {
         $container = $app->getContainer();
         $container['environment'] = $env;
-        list($req, $res) = $this->prepareReqAndRes($env);
-
-        // Invoke app
-        return $app($req, $res);
+        list($request, $response) = $this->prepareReqAndRes($env, $body);
+        $container['request'] = $request;
+        return $app($request, $response);
     }
 }
