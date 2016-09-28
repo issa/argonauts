@@ -139,7 +139,7 @@ trait JsonApiTrait
      *
      * @return Response
      */
-    protected function getMetaResponse($meta, $statusCode = Response::HTTP_OK, $headers = [])
+    protected function getMetaResponse($meta, $statusCode = ResponsesInterface::HTTP_OK, $headers = [])
     {
         $this->checkQueryParameters();
         $responses = $this->container[ResponsesInterface::class];

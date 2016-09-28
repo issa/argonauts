@@ -13,7 +13,7 @@ class UserUpdate extends JsonApiController
     public function __invoke(Request $request, Response $response, $args)
     {
         if (!$user = \User::findByUsername($args['id'])) {
-            throw new JsonApiException(new Error("User could not be found"));
+            throw new JsonApiException(new Error('User could not be found'));
         }
 
         $document = $this->getDocument();

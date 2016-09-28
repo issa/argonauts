@@ -10,8 +10,8 @@ class PostWithBodyRoute extends JsonApiController
 {
     public function __invoke(Request $request, Response $response, $args)
     {
-        var_dump( $this->getDocument($request) );exit;
+        $doc = $this->getDocument();
 
-        return $this->getContentResponse($user);
+        return $this->getMetaResponse($doc);
     }
 }

@@ -27,21 +27,16 @@ class User extends \Neomerx\JsonApi\Schema\SchemaProvider
     {
         $relationships = [
             'contacts' => [
-                self::LINKS => ['self' => new Link('/users/'.$user->id.'/contacts')],
+                self::LINKS => ['self' => new Link('/user/'.$user->username.'/contacts')],
             ],
         ];
 
-        if (in_array('contacts', $includeList)) {
+        if ($isPrimary && in_array('contacts', $includeList)) {
             $relationships['contacts'][self::DATA] = $user->contacts;
         } else {
             $relationships['contacts'][self::SHOW_DATA] = false;
         }
 
         return $relationships;
-    }
-
-    public function xgetIncludePaths()
-    {
-        return ['contacts'];
     }
 }

@@ -19,7 +19,7 @@ class UsersIndex extends JsonApiController
 
         $users = \User::findBySql(
             '1 ORDER BY username LIMIT ? OFFSET ?',
-            [ $limit, $offset ]
+            [$limit, $offset]
         );
 
         return $this->getPaginatedContentResponse($users, $total);

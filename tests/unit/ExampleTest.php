@@ -95,7 +95,7 @@ class ExampleTest extends \Codeception\Test\Unit
         $response = $app($req, $res);
 
         $this->assertEquals(
-            '{"data":{"type":"user","id":"root@studip","attributes":{"username":"root@studip","first_name":"Root","last_name":"Studip"},"relationships":{"contacts":{"links":{"self":"plugins.php\/argonautsplugin\/users\/76ed43ef286fb55cf9e41beadb484a9f\/contacts"}}},"links":{"self":"plugins.php\/argonautsplugin\/user\/root@studip"}}}',
+            '{"data":{"type":"user","id":"root@studip","attributes":{"username":"root@studip","first_name":"Root","last_name":"Studip"},"relationships":{"contacts":{"links":{"self":"plugins.php\/argonautsplugin\/user\/root@studip\/contacts"}}},"links":{"self":"plugins.php\/argonautsplugin\/user\/root@studip"}}}',
             (string) $response->getBody()
         );
         $this->assertEquals(200, $response->getStatusCode());
@@ -191,7 +191,6 @@ class ExampleTest extends \Codeception\Test\Unit
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-
     public function testPostWithBody()
     {
         $app = $this->appFactory();
@@ -205,18 +204,21 @@ class ExampleTest extends \Codeception\Test\Unit
                 'REQUEST_URI' => '/resource',
                 'QUERY_STRING' => '',
                 'REQUEST_METHOD' => 'POST',
-                'HTTP_CONTENT_TYPE' => 'application/vnd.api+json'
+                'HTTP_CONTENT_TYPE' => 'application/vnd.api+json',
             ]
         );
 
         // Invoke app
         $body = new \Slim\Http\Body(fopen('php://temp', 'r+'));
         $body->write(json_encode(
-                         [ "data" => [ "type" => "articles", "id" => "1" ] ]
+                         ['data' => ['type' => 'articles', 'id' => '1']]
                      ));
-        $body->rewind();
         $response = $this->sendMockRequest($app, $env, $body);
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(
+            '{"meta":{"data":{"type":"articles","id":"1"}}}',
+            (string) $response->getBody()
+        );
     }
 
     // ***** PRIVATE *****
@@ -249,6 +251,7 @@ class ExampleTest extends \Codeception\Test\Unit
         $container['environment'] = $env;
         list($request, $response) = $this->prepareReqAndRes($env, $body);
         $container['request'] = $request;
+
         return $app($request, $response);
     }
 }
