@@ -11,9 +11,10 @@ use Neomerx\JsonApi\Http\Responses as NeomerxResponses;
 use Slim\Http\Headers;
 use Slim\Http\Response;
 
-/*
- * @author info@neomerx.com (www.neomerx.com)
- * @author mlunzena@uos.de
+/**
+ * Diese Factory-Klasse verknüpft die "neomerx/json-api"-Bibliothek mit der
+ * Slim-Applikation. Hier wird festgelegt, wie Slim-artige Response-Objekte gebildet
+ * werden.
  */
 class Responses extends NeomerxResponses
 {
@@ -48,12 +49,17 @@ class Responses extends NeomerxResponses
     private $urlPrefix;
 
     /**
+     * Dieser Konstruktor wird in \Argonauts\Providers\JsonApiServices
+     * befüllt.
+     *
      * @param MediaTypeInterface               $outputMediaType
      * @param SupportedExtensionsInterface     $extensions
      * @param EncoderInterface                 $encoder
      * @param ContainerInterface               $schemes
      * @param EncodingParametersInterface|null $parameters
      * @param string|null                      $urlPrefix
+     *
+     * @internal
      */
     public function __construct(
         MediaTypeInterface $outputMediaType,
@@ -72,7 +78,16 @@ class Responses extends NeomerxResponses
     }
 
     /**
-     * {@inheritdoc}
+     * Diese Methode ist die Schlüsselstelle der ganzen Klasse. Es
+     * werden Body, Statuscode und Headers der zukünftigen Response
+     * übergeben und eine \Slim\Http\Response zurückgegeben.
+     *
+     * @param string|null $content    der Body der zukünftigen Response
+     * @param int         $statusCode der numerische Statuscode der
+     *                                zukünftigen Response
+     * @param array       $headers    die Header der zukünftigen Response
+     *
+     * @return \Slim\Http\Response die fertige Slim-Response
      */
     protected function createResponse($content, $statusCode, array $headers)
     {
@@ -85,6 +100,8 @@ class Responses extends NeomerxResponses
 
     /**
      * {@inheritdoc}
+     *
+     * @internal
      */
     protected function getEncoder()
     {
@@ -93,6 +110,8 @@ class Responses extends NeomerxResponses
 
     /**
      * {@inheritdoc}
+     *
+     * @internal
      */
     protected function getUrlPrefix()
     {
@@ -101,6 +120,8 @@ class Responses extends NeomerxResponses
 
     /**
      * {@inheritdoc}
+     *
+     * @internal
      */
     protected function getEncodingParameters()
     {
@@ -109,6 +130,8 @@ class Responses extends NeomerxResponses
 
     /**
      * {@inheritdoc}
+     *
+     * @internal
      */
     protected function getSchemaContainer()
     {
@@ -117,6 +140,8 @@ class Responses extends NeomerxResponses
 
     /**
      * {@inheritdoc}
+     *
+     * @internal
      */
     protected function getSupportedExtensions()
     {
@@ -125,6 +150,8 @@ class Responses extends NeomerxResponses
 
     /**
      * {@inheritdoc}
+     *
+     * @internal
      */
     protected function getMediaType()
     {

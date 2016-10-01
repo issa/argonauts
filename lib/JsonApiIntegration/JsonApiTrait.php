@@ -10,9 +10,15 @@ use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
 use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
 use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
 
-/*
+/**
+ * Dieser Trait beinhaltet Instanzmethoden und -variablen, die in
+ * JSON-API-Routen verwendet werden können, um entsprechende
+ * JSON-API-Responses zu generieren.
+ *
  * @author info@neomerx.com (www.neomerx.com)
  * @author mlunzena@uos.de
+ *
+ * @see https://github.com/InactiveProjects/limoncello/blob/v0.5.1/src/Http/JsonApiTrait.php
  */
 trait JsonApiTrait
 {
@@ -212,7 +218,7 @@ trait JsonApiTrait
             'total' => (int) $total,
         ];
 
-        $paginator = new Paginator($data, $total, $offset, $limit);
+        $paginator = new Paginator($total, $offset, $limit);
 
         if (!$links) {
             $links = [];
@@ -261,6 +267,22 @@ trait JsonApiTrait
         return $this->container[EncodingParametersInterface::class];
     }
 
+    /**
+     * Liefert Offset und Limit aus den Request-Parametern zurück.
+     *
+     * @param int $offsetDefault optional; gibt den Standard-Offset
+     *                           an, falls dieser Wert nicht im Request gesetzt ist
+     * @param int $limitDefault  optional; gibt das Standard-Limit an,
+     *                           falls dieser Wert nicht im Request gesetzt ist
+     *
+     * @return array {
+     *
+     *     @var int $offset der im Request gesetzte Offset oder
+     *     ansonsten der Default-Wert 0
+     *     @var int $limit das im Request gesetzte Limit oder
+     *     ansonsten der Default-Wert 30
+     * }
+     */
     protected function getOffsetAndLimit($offsetDefault = 0, $limitDefault = 30)
     {
         $params = $this->getQueryParameters()->getPaginationParameters();

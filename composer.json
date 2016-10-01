@@ -29,6 +29,9 @@
         "test": [
             "composer_modules/bin/codecept run"
         ],
+        "dox": [
+            "apigen.phar generate -s ArgonautsPlugin.class.php -s lib -d dox --template-theme bootstrap"
+        ],
         "php-cs-fixer": [
             "php-cs-fixer fix --level symfony ArgonautsPlugin.class.php",
             "php-cs-fixer fix --level symfony lib",

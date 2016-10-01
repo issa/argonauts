@@ -2,6 +2,10 @@
 
 namespace Argonauts\JsonApiIntegration;
 
+/**
+ * Diese Klasse enthält lediglich Konstanten, die in diesem Namespace
+ * benötigt werden.
+ */
 class Config
 {
     /** Config file name w/o extension */

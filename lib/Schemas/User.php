@@ -6,13 +6,27 @@ use Neomerx\JsonApi\Document\Link;
 
 class User extends \Neomerx\JsonApi\Schema\SchemaProvider
 {
+    /**
+     * Hier wird der Typ des Schemas festgelegt.
+     * {@inheritdoc}
+     */
     protected $resourceType = 'user';
 
+    /**
+     * Diese Method entscheidet über die JSON-API-spezifische ID von
+     * \User-Objekten.
+     * {@inheritdoc}
+     */
     public function getId($user)
     {
         return studip_utf8encode($user->username);
     }
 
+    /**
+     * Hier können (ausgewählte) Instanzvariablen eines \User-Objekts
+     * für die Ausgabe vorbereitet werden.
+     * {@inheritdoc}
+     */
     public function getAttributes($user)
     {
         return [
@@ -23,6 +37,12 @@ class User extends \Neomerx\JsonApi\Schema\SchemaProvider
         ];
     }
 
+    /**
+     * In dieser Methode können Relationships zu anderen Objekten
+     * spezifiziert werden. In diesem Beispiel kleben die Kontakte
+     * eines Nutzers bei Bedarf am \User.
+     * {@inheritdoc}
+     */
     public function getRelationships($user, $isPrimary, array $includeList)
     {
         $relationships = [

@@ -2,11 +2,17 @@
 
 namespace Argonauts\JsonApiIntegration;
 
+/**
+ * Diese Klasse bündelt lediglich die Logik, um aus dem Triple [Gesamtanzahl,
+ * Offset, Limit], die neuen Triple für die nächste, vorherige, erste
+ * oder letzte Seite zu generieren.
+ *
+ * @internal
+ */
 class Paginator
 {
-    public function __construct($items, $total, $offset, $limit)
+    public function __construct($total, $offset, $limit)
     {
-        $this->items = $items;
         $this->total = $total;
         $this->offset = $offset;
         $this->limit = $limit;
