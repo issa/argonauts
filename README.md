@@ -58,11 +58,80 @@ und würde eine Ausgabe ähnlich wie diese produzieren:
 }
 ```
 
-- http://www.slimframework.com/docs/
+## Tutorials
+
+Um eine eigene Kernroute zu schreiben, muss man folgende Schritte
+ausführen:
+
+- Routing: In der Slim-Applikation wird für eine URL und eine Request-Methode ein Route-Handler eingetragen.
+- Handler: Der Route-Handler muss implementiert werden.
+- Schema: Eventuell müssen neue Schemata implementiert und registriert weren.
+
+### Routing
+
+Route-Handler werden in der Datei argonauts/lib/JsonApiRoutemap.php eingetragen. Um zum Beispiel eine `resource object`
+abzufragen, soll laut JSON-API-Spezifikation ein GET-Request abgeschickt werden. Wenn man zum Beispiel die Liste aller
+Veranstaltungen unter der URL '/courses' abfragen wollte, würde man in der JsonApiRoutemap-Datei folgende Zeile in der
+Methode JsonApiRoutemap::authorizedRoutes eintragen:
+
+```php
+<?php
+
+namespace Argonauts;
+
+// [...]
+
+class JsonApiRoutemap
+{
+
+// [...]
+
+    /**
+     * Hier werden autorisierte (Kern-)Routen explizit vermerkt.
+     * Außerdem wird über die \PluginEngine allen JsonApiPlugins die
+     * Möglichkeit gegeben, sich hier einzutragen.
+     */
+    public function authorizedRoutes()
+    {
+
+        // [...]
+        $this->app->get('/courses', CoursesIndex::class);
+        // [...]
+    }
+}
+```
+
+Die relevante Zeile
+
+```php
+$this->app->get('/courses', CoursesIndex::class);
+```
+
+enthält drei Informationen:
+
+**Request-Methode**
+
+Der Aufruf von `->get` registriert den Route-Handler für GET-Requests. Für POST-, DELETE- oder PATCH-Requests wird
+stattdessen die \Slim\App::post, \Slim\App::delete und \Slim\App::patch verwendet.
+
+**URL-Pattern**
+
+Der Route-Handler im Beispiel wird für GET-Requests an '/courses' registriert. Es gibt verschiedene Möglichkeiten, das
+URL-Pattern festzulegen.
+
+**Route-Handler**
+
+Der Route-Handler kann auf verschiedene Weise angegeben werden. Es kann entweder eine anonyme Funktion, ein anderes
+Callable, ein String wie "Klassenname:Methode" oder wie hier im Beispiel und sehr empfohlen einfach nur der Name einer
+Klasse, die intern `__invoke` implementiert.
+
+Sehr ausführliche Dokumentation über das Routing findet sich (Slim-Userguide)[http://www.slimframework.com/docs/objects/router.html].
+
+## Tutorials
+
 - https://github.com/neomerx/json-api/tree/v0.8.10
 
 
-## Tutorials
 
 - [Wie schreibt man eine Route?](doc/howto-routes.md)
 - Routen:
