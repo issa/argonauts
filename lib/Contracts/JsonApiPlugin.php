@@ -19,7 +19,7 @@ interface JsonApiPlugin
      * Beispiel:
      *     class Blubber ... implements JsonApiPlugin
      *     {
-     *         public function registerAuthorizedRoutes(\Slim\App $app)
+     *         public function registerAuthenticatedRoutes(\Slim\App $app)
      *         {
      *             $app->get('/blubbers', BlubbersIndex::class);
      *         }
@@ -29,7 +29,7 @@ interface JsonApiPlugin
      * @param \Slim\App $app die Slim-Applikation, in der das Plugin
      *                       Routen eintragen möchte
      */
-    public function registerAuthorizedRoutes(\Slim\App $app);
+    public function registerAuthenticatedRoutes(\Slim\App $app);
 
     /**
      * In dieser Methode können Plugins eigene Routen ohne Autorisierung
@@ -42,7 +42,7 @@ interface JsonApiPlugin
      * Beispiel:
      *     class Blubber ... implements JsonApiPlugin
      *     {
-     *         public function registerUnauthorizedRoutes(\Slim\App $app)
+     *         public function registerUnauthenticatedRoutes(\Slim\App $app)
      *         {
      *             $app->get('/blubbers', BlubbersIndex::class);
      *         }
@@ -52,7 +52,7 @@ interface JsonApiPlugin
      * @param \Slim\App $app die Slim-Applikation, in der das Plugin
      *                       Routen eintragen möchte
      */
-    public function registerUnauthorizedRoutes(\Slim\App $app);
+    public function registerUnauthenticatedRoutes(\Slim\App $app);
 
     /**
      * In dieser Methode können Plugins Schemata den verwendeten

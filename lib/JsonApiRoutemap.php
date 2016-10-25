@@ -3,10 +3,11 @@
 namespace Argonauts;
 
 use Argonauts\Contracts\JsonApiPlugin;
-use Argonauts\Middlewares\Authorization;
+use Argonauts\Middlewares\Authentication;
 use Argonauts\Middlewares\JsonApi as JsonApiMiddleware;
-use Argonauts\Routes\AuthorizedExample;
-use Argonauts\Routes\UnauthorizedExample;
+use Argonauts\Providers\StudipServices;
+use Argonauts\Routes\AuthenticatedExample;
+use Argonauts\Routes\UnauthenticatedExample;
 use Argonauts\Routes\UsersIndex;
 use Argonauts\Routes\UserUpdate;
 
@@ -23,16 +24,16 @@ use Argonauts\Routes\UserUpdate;
  *
  * Routen können entweder mit Autorisierung oder auch ohne eingetragen
  * werden. Autorisierte Kernrouten werden in
- * JsonApiRoutemap::authorizedRoutes vermerkt. Kernrouten ohne
+ * JsonApiRoutemap::authenticatedRoutes vermerkt. Kernrouten ohne
  * notwendige Autorisierung werden in
- * JsonApiRoutemap::unauthorizedRoutes registriert. Routen aus Plugins
+ * JsonApiRoutemap::unauthenticatedRoutes registriert. Routen aus Plugins
  * werden jeweils in den Methoden
- * \Argonauts\Contracts\JsonApiPlugin::registerAuthorizedRoutes und
- * \Argonauts\Contracts\JsonApiPlugin::registerUnauthorizedRoutes
+ * \Argonauts\Contracts\JsonApiPlugin::registerAuthenticatedRoutes und
+ * \Argonauts\Contracts\JsonApiPlugin::registerUnauthenticatedRoutes
  * eingetragen.
  *
- * Autorisierte Routen werden in \Argonauts\Middlewares\Authorization
- * autorisiert.
+ * Zu authentifizierende Routen werden in \Argonauts\Middlewares\Authentication
+ * authentifiziert.
  *
  * Wie Routen registriert werden, kann man im `User Guide` des
  * Slim-Frameworks nachlesen
@@ -51,7 +52,7 @@ use Argonauts\Routes\UserUpdate;
  *
  *
  * @see \Argonauts\Middlewares\JsonApi
- * @see \Argonauts\Middlewares\Authorization
+ * @see \Argonauts\Middlewares\Authentication
  * @see \Argonauts\Contracts\JsonApiPlugin
  * @see http://www.slimframework.com/docs/objects/router.html#how-to-create-routes
  */
@@ -74,16 +75,17 @@ class JsonApiRoutemap
     /**
      * Hier werden die Routen tatsächlich eingetragen.
      * Autorisierte Routen werden mit der Middleware
-     * \Argonauts\Middlewares\Authorization ausgestattet und in
-     * JsonApiRoutemap::authorizedRoutes eingetragen. Routen ohne
-     * Autorisierung werden in JsonApiRoutemap::unauthorizedRoutes vermerkt.
+     * \Argonauts\Middlewares\Authentication ausgestattet und in
+     * JsonApiRoutemap::authenticatedRoutes eingetragen. Routen ohne
+     * Autorisierung werden in JsonApiRoutemap::unauthenticatedRoutes vermerkt.
      */
     public function __invoke()
     {
         $this->app->add(new JsonApiMiddleware($this->app));
 
-        $this->app->group('', [$this, 'authorizedRoutes'])->add(new Authorization($this->app, $this->plugin));
-        $this->app->group('', [$this, 'unauthorizedRoutes']);
+        $this->app->group('', [$this, 'authenticatedRoutes'])
+            ->add(new Authentication($this->getAuthenticator()));
+        $this->app->group('', [$this, 'unauthenticatedRoutes']);
     }
 
     /**
@@ -91,11 +93,11 @@ class JsonApiRoutemap
      * Außerdem wird über die \PluginEngine allen JsonApiPlugins die
      * Möglichkeit gegeben, sich hier einzutragen.
      */
-    public function authorizedRoutes()
+    public function authenticatedRoutes()
     {
-        \PluginEngine::sendMessage(JsonApiPlugin::class, 'registerAuthorizedRoutes', $this->app);
+        \PluginEngine::sendMessage(JsonApiPlugin::class, 'registerAuthenticatedRoutes', $this->app);
 
-        $this->app->get('/auth', AuthorizedExample::class);
+        $this->app->get('/auth', AuthenticatedExample::class);
         $this->app->get('/users', UsersIndex::class);
         $this->app->post('/user/{id}', UserUpdate::class);
     }
@@ -105,10 +107,17 @@ class JsonApiRoutemap
      * Außerdem wird über die \PluginEngine allen JsonApiPlugins die
      * Möglichkeit gegeben, sich hier einzutragen.
      */
-    public function unauthorizedRoutes()
+    public function unauthenticatedRoutes()
     {
-        \PluginEngine::sendMessage(JsonApiPlugin::class, 'registerUnauthorizedRoutes', $this->app);
+        \PluginEngine::sendMessage(JsonApiPlugin::class, 'registerUnauthenticatedRoutes', $this->app);
 
-        $this->app->get('/unauth', UnauthorizedExample::class);
+        $this->app->get('/unauth', UnauthenticatedExample::class);
+    }
+
+    private function getAuthenticator()
+    {
+        $container = $this->app->getContainer();
+
+        return $container[StudipServices::AUTHENTICATOR];
     }
 }

@@ -72,7 +72,7 @@ ausführen:
 Route-Handler werden in der Datei argonauts/lib/JsonApiRoutemap.php eingetragen. Um zum Beispiel eine `resource object`
 abzufragen, soll laut JSON-API-Spezifikation ein GET-Request abgeschickt werden. Wenn man zum Beispiel die Liste aller
 Veranstaltungen unter der URL '/courses' abfragen wollte, würde man in der JsonApiRoutemap-Datei folgende Zeile in der
-Methode JsonApiRoutemap::authorizedRoutes eintragen:
+Methode JsonApiRoutemap::authenticatedRoutes eintragen:
 
 ```php
 <?php
@@ -91,7 +91,7 @@ class JsonApiRoutemap
      * Außerdem wird über die \PluginEngine allen JsonApiPlugins die
      * Möglichkeit gegeben, sich hier einzutragen.
      */
-    public function authorizedRoutes()
+    public function authenticatedRoutes()
     {
 
         // [...]

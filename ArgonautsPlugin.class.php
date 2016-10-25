@@ -1,9 +1,8 @@
 <?php
 
-require_once 'composer_modules/autoload.php';
-
 use Argonauts\AppFactory;
 use Argonauts\JsonApiRoutemap;
+use Argonauts\Providers\StudipServices;
 
 /**
  * Mit Hilfe dieses Plugins kann eine JSON-API-kompatible
@@ -26,6 +25,8 @@ class ArgonautsPlugin extends \StudIPPlugin implements \SystemPlugin
     public function __construct()
     {
         parent::__construct();
+
+        require_once 'composer_modules/autoload.php';
     }
 
     public static function onEnable($pluginId)
@@ -34,14 +35,13 @@ class ArgonautsPlugin extends \StudIPPlugin implements \SystemPlugin
         \RolePersistence::assignPluginRoles($pluginId, array(7));
     }
 
-    public static function onDisable($pluginId)
-    {
-    }
-
-    public function perform($unconsumed_path)
+    public function perform($unconsumedPath)
     {
         $appFactory = new AppFactory();
         $app = $appFactory->makeApp($this);
+
+        $container = $app->getContainer();
+        $container->register(new StudipServices());
 
         $app->group('/argonautsplugin', new JsonApiRoutemap($app, $this));
 

@@ -13,6 +13,7 @@ use Slim\Http\Request;
 use Slim\Http\RequestBody;
 use Slim\Http\Response;
 use Slim\Http\Uri;
+use Argonauts\Middlewares\Authentication;
 use Argonauts\Middlewares\JsonApi as JsonApiMiddleware;
 
 class ExampleTest extends \Codeception\Test\Unit
@@ -58,12 +59,14 @@ class ExampleTest extends \Codeception\Test\Unit
     {
         $app = $this->appFactory();
 
-        $app->get('/testRoute',
-                    function (RequestInterface $request, ResponseInterface $response, $args) {
-                        $response->getBody()->write('Hello, dummy');
+        $app->get(
+            '/testRoute',
+            function (RequestInterface $request, ResponseInterface $response, $args) {
+                $response->getBody()->write('Hello, dummy');
 
-                        return $response;
-                    });
+                return $response;
+            }
+        );
 
         // Prepare request and response objects
         $env = Environment::mock([
@@ -210,15 +213,67 @@ class ExampleTest extends \Codeception\Test\Unit
 
         // Invoke app
         $body = new \Slim\Http\Body(fopen('php://temp', 'r+'));
-        $body->write(json_encode(
-                         ['data' => ['type' => 'articles', 'id' => '1']]
-                     ));
+        $body->write(json_encode(['data' => ['type' => 'articles', 'id' => '1']]));
         $response = $this->sendMockRequest($app, $env, $body);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(
             '{"meta":{"data":{"type":"articles","id":"1"}}}',
             (string) $response->getBody()
         );
+    }
+
+    public function testUnauthenticatedRoute()
+    {
+        $app = $this->appFactory();
+
+        $authenticator = function () {
+            return null;
+        };
+
+        $app->get('/unauth', 'Argonauts\Test\SimpleRoute:index')
+            ->add(new Authentication($authenticator))
+            ->add(new JsonApiMiddleware($app));
+
+        $env = Environment::mock([
+            'SCRIPT_NAME' => '/plugins.php',
+            'REQUEST_URI' => '/unauth',
+            'REQUEST_METHOD' => 'GET',
+        ]);
+
+        // Invoke app
+        $response = $this->sendMockRequest($app, $env);
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function testAuthenticatedRoute()
+    {
+        $app = $this->appFactory();
+
+        $authenticator = function ($username, $password) {
+            if ($username === 'test_user' && $password === 'testing') {
+                return new User();
+            }
+
+            return null;
+        };
+
+        $app->get('/auth', 'Argonauts\Test\SimpleRoute:index')
+            ->add(new Authentication($authenticator))
+            ->add(new JsonApiMiddleware($app));
+
+        $env = Environment::mock(
+            [
+                'SCRIPT_NAME' => '/plugins.php',
+                'REQUEST_URI' => '/auth',
+                'REQUEST_METHOD' => 'GET',
+                'PHP_AUTH_USER' => 'test_user',
+                'PHP_AUTH_PW' => 'testing',
+            ]
+        );
+
+        // Invoke app
+        $response = $this->sendMockRequest($app, $env);
+        $this->assertNotEquals(401, $response->getStatusCode());
     }
 
     // ***** PRIVATE *****
